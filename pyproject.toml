@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rouen-motion-experiment"
+version = "0.1.0"
+description = "Computer Vision Experiment: Video Segmentation, Motion Tracking, Optical Flow, and Frame Interpolation on Rouen UrbanTracker Dataset"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Computer Vision Lab" }
+]
+keywords = [
+    "computer-vision",
+    "video-segmentation",
+    "motion-tracking",
+    "optical-flow",
+    "frame-interpolation",
+    "urbantracker",
+    "rouen"
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "opencv-python>=4.8.0",
+    "matplotlib>=3.7.0",
+    "pyyaml>=6.0",
+    "scipy>=1.10.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+pythonpath = ["src"]
+

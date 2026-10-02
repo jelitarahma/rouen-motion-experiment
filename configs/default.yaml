@@ -1,0 +1,66 @@
+dataset:
+  frame_dir: "data/rouen/frames"
+  start_frame: 0
+  end_frame: null # null means process all available frames in dataset (628)
+  step: 1
+
+
+preprocessing:
+  resize_width: 640
+  resize_height: 360
+  apply_gaussian_blur: true
+  blur_kernel_size: [3, 3]
+  blur_sigma: 0.0
+
+segmentation:
+  algorithm: "mog" # options: "mog", "kmeans"
+  mog:
+    history: 200
+    var_threshold: 25.0
+    detect_shadows: true
+    shadow_value: 127
+    learning_rate: -1.0 # -1 means automatically chosen by OpenCV
+    morph_kernel_size: [5, 5]
+    min_contour_area: 80.0
+    max_contour_area: 50000.0
+  kmeans:
+    n_clusters: 4
+    max_iter: 20
+    epsilon: 1.0
+
+tracking:
+  method: "multiframe" # options: "twoframe", "multiframe"
+  iou_threshold: 0.25
+  max_lost_frames: 6
+  min_hits: 2
+  velocity_damping: 0.95
+
+optical_flow:
+  method: "farneback"
+  farneback:
+    pyr_scale: 0.5
+    levels: 3
+    winsize: 15
+    iterations: 3
+    poly_n: 5
+    poly_sigma: 1.2
+    flags: 0
+  multiframe:
+    temporal_window: 3
+    forward_backward_threshold: 1.5
+    temporal_smoothing: true
+
+interpolation:
+  enabled: true
+  alpha: 0.5
+  evaluate_ground_truth: true
+  eval_skip_interval: 2
+
+visualization:
+  save_visualizations: true
+  show_vectors: true
+  vector_step: 20
+  output_format: "png"
+
+output:
+  directory: "outputs"

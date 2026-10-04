@@ -96,9 +96,12 @@ class MotionCompensatedInterpolator:
         res_bwd = self.flow_estimator.compute(gray1, gray0)
         b_flow = res_bwd.flow
 
-        # scale flow sesuai alpha
-        flow_0_to_t = alpha * f_flow
-        flow_1_to_t = (1.0 - alpha) * b_flow
+        # Pada backward warping (remap), untuk mengambil sampel piksel asal yang berpindah ke
+        # koordinat x pada waktu perantara t=alpha:
+        # x_dest = x_src + alpha * f_flow  =>  x_src = x_dest - alpha * f_flow
+        # Oleh karena itu, vektor flow harus dikurangkan (tanda negatif).
+        flow_0_to_t = -alpha * f_flow
+        flow_1_to_t = -(1.0 - alpha) * b_flow
 
         # warp frame
         warped0 = warp_image_with_flow(frame0_bgr, flow_0_to_t)

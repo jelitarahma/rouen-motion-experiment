@@ -31,6 +31,12 @@ def run_multiframe_comparison(pipeline: RouenMotionPipeline, frame_idx: int = 15
     out_dir = Path(pipeline.config.output.directory) / "optical_flow"
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    if len(pipeline.dataset) < 2:
+        print("Not enough frames for optical flow comparison.")
+        return
+
+    frame_idx = min(frame_idx, len(pipeline.dataset) - 2)
+
     two_frame_flow = FarnebackOpticalFlow(pipeline.config.optical_flow.farneback)
     multi_frame_flow = MultiFrameOpticalFlow(
         base_flow=FarnebackOpticalFlow(pipeline.config.optical_flow.farneback),

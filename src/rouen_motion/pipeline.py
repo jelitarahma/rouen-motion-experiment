@@ -43,7 +43,7 @@ class RouenMotionPipeline:
         self.visualizer = ExperimentVisualizer(self.config.output.directory)
 
     def run_segmentation_experiment(self, max_frames: Optional[int] = None) -> Dict[str, Any]:
-        """Runs segmentation experiment on frame sequence."""
+        """Menjalankan eksperimen segmentasi pada urutan frame."""
         self.segmenter.reset()
         num_frames = min(len(self.dataset), max_frames or len(self.dataset))
         total_regions = 0
@@ -82,7 +82,7 @@ class RouenMotionPipeline:
         return metrics
 
     def run_tracking_experiment(self, max_frames: Optional[int] = None) -> Dict[str, Any]:
-        """Runs segmentation + motion tracking across frames."""
+        """Menjalankan eksperimen segmentasi + motion tracking antar frame."""
         self.segmenter.reset()
         self.tracker.reset()
         num_frames = min(len(self.dataset), max_frames or len(self.dataset))
@@ -124,7 +124,7 @@ class RouenMotionPipeline:
         return metrics
 
     def run_optical_flow_experiment(self, max_frames: Optional[int] = None) -> Dict[str, Any]:
-        """Runs optical flow estimation and visualization between consecutive frames."""
+        """Menjalankan estimasi optical flow dan visualisasi antar frame berurutan."""
         self.optical_flow.reset()
         num_frames = min(len(self.dataset), max_frames or len(self.dataset))
         if num_frames < 2:
@@ -178,11 +178,11 @@ class RouenMotionPipeline:
 
     def run_interpolation_experiment(self, max_frames: Optional[int] = None) -> Dict[str, Any]:
         """
-        Runs frame interpolation experiments:
-        1. Synthesizes intermediate frame t+0.5 between frame t and t+1.
-        2. If ground-truth evaluation is enabled, skips frame t+1 and synthesizes it
-           from frame t and frame t+2, quantitatively computing PSNR, SSIM, and MAE
-           against actual frame t+1 and comparing against linear blending!
+        Menjalankan eksperimen interpolasi frame:
+        1. Sintesis frame perantara t+0.5 antara frame t dan t+1.
+        2. Jika evaluasi ground-truth aktif, lewati frame t+1 dan lakukan sintesis
+           dari frame t dan frame t+2, menghitung PSNR, SSIM, dan MAE secara kuantitatif
+           terhadap frame t+1 aktual serta membandingkannya dengan baseline linear blending.
         """
         num_frames = min(len(self.dataset), max_frames or len(self.dataset))
         if num_frames < 3:
@@ -216,11 +216,11 @@ class RouenMotionPipeline:
             seg_gt = self.segmenter.segment(f_mid_gt)
             roi_mask = seg_gt.mask if np.any(seg_gt.mask) else None
 
-            # interpolasi frame t+1 (alpha = 0.5)
+            # interpolasi frame t+1
             interp_res = self.interpolator.interpolate(
                 frame0_bgr=f0,
                 frame1_bgr=f2,
-                alpha=0.5,
+                alpha=self.config.interpolation.alpha,
                 ground_truth=f_mid_gt,
                 roi_mask=roi_mask,
             )
@@ -290,7 +290,7 @@ class RouenMotionPipeline:
         return metrics
 
     def run_all(self, max_frames: Optional[int] = None) -> Dict[str, Any]:
-        """Runs the entire experimental pipeline sequentially."""
+        """Menjalankan seluruh pipeline eksperimen secara berurutan."""
         seg_res = self.run_segmentation_experiment(max_frames=max_frames)
         track_res = self.run_tracking_experiment(max_frames=max_frames)
         flow_res = self.run_optical_flow_experiment(max_frames=max_frames)

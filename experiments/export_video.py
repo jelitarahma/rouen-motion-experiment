@@ -121,6 +121,7 @@ def main() -> None:
     parser.add_argument("--config", type=str, default="configs/default.yaml")
     parser.add_argument("--type", type=str, default="all", choices=["all", "original", "tracking", "flow"])
     parser.add_argument("--frames", type=int, default=200, help="Number of frames to render into video")
+    parser.add_argument("--fps", type=int, default=25, help="Frames per second for output video")
     args = parser.parse_args()
 
     config = load_config(args.config)

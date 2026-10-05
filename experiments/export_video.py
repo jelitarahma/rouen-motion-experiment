@@ -129,13 +129,13 @@ def main() -> None:
     out_dir = Path(config.output.directory)
 
     if args.type in ("all", "original"):
-        export_original_video(dataset, out_dir / "rouen_original.mp4", max_frames=args.frames)
+        export_original_video(dataset, out_dir / "rouen_original.mp4", max_frames=args.frames, fps=args.fps)
 
     if args.type in ("all", "tracking"):
-        export_tracking_video(dataset, config, out_dir / "rouen_tracking.mp4", max_frames=args.frames)
+        export_tracking_video(dataset, config, out_dir / "rouen_tracking.mp4", max_frames=args.frames, fps=args.fps)
 
     if args.type in ("all", "flow"):
-        export_flow_video(dataset, config, out_dir / "rouen_flow.mp4", max_frames=min(args.frames, 150))
+        export_flow_video(dataset, config, out_dir / "rouen_flow.mp4", max_frames=min(args.frames, 150), fps=args.fps)
 
 
 if __name__ == "__main__":
